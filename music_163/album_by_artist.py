@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 from music_163 import sql
+from music_163.config import proxies
 
 
 class Album(object):
@@ -26,7 +27,7 @@ class Album(object):
     def save_albums(self, artist_id):
         params = {'id': artist_id, 'limit': '200'}
         # 获取歌手个人主页
-        r = requests.get('http://music.163.com/artist/album', headers=self.headers, params=params)
+        r = requests.get('http://music.163.com/artist/album', headers=self.headers, params=params, proxies=proxies)
 
         # 网页解析
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
