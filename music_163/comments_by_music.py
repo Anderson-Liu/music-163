@@ -1,6 +1,7 @@
 """
 根据歌曲 ID 获得所有的歌曲所对应的评论信息
 """
+import base64
 import sqlite3
 
 import requests
@@ -8,6 +9,8 @@ from music_163 import sql
 import time
 import threading
 import pymysql.cursors
+
+from music_163.config import proxies
 
 
 class Comments(object):
@@ -35,13 +38,15 @@ class Comments(object):
         'encSecKey': '8c85d1b6f53bfebaf5258d171f3526c06980cbcaf490d759eac82145ee27198297c152dd95e7ea0f08cfb7281588cdab305946e01b9d84f0b49700f9c2eb6eeced8624b16ce378bccd24341b1b5ad3d84ebd707dbbd18a4f01c2a007cd47de32f28ca395c9715afa134ed9ee321caa7f28ec82b94307d75144f6b5b134a9ce1a'
     }
 
-    proxies = {'http': 'http://127.0.0.1:10800'}
+    # proxies = {'http': 'http://127.0.0.1:10800'}
+
 
     def get_comments(self, music_id, flag):
         self.headers['Referer'] = 'http://music.163.com/playlist?id=' + str(music_id)
+
         if flag:
             r = requests.post('http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(music_id),
-                              headers=self.headers, params=self.params, data=self.data, proxies=self.proxies)
+                              headers=self.headers, params=self.params, data=self.data, proxies=proxies)
         else:
             r = requests.post('http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(music_id),
                               headers=self.headers, params=self.params, data=self.data)
