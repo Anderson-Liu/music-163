@@ -1,6 +1,7 @@
 """
 根据歌曲 ID 获得所有的歌曲所对应的评论信息
 """
+import sqlite3
 
 import requests
 from music_163 import sql
@@ -69,21 +70,9 @@ if __name__ == '__main__':
     music_after = sql.get_after_music()
 
     # pymysql 链接不是线程安全的
-    connection1 = pymysql.connect(host='localhost',
-                                  user='root',
-                                  password='1234',
-                                  db='test',
-                                  charset='utf8mb4',
-                                  cursorclass=pymysql.cursors.DictCursor)
+    connection = sqlite3.connect('music163.db', check_same_thread=False)
 
-    connection2 = pymysql.connect(host='localhost',
-                                  user='root',
-                                  password='1234',
-                                  db='test',
-                                  charset='utf8mb4',
-                                  cursorclass=pymysql.cursors.DictCursor)
-
-    t1 = threading.Thread(target=save_comments, args=(music_before, True, connection1))
-    t2 = threading.Thread(target=save_comments, args=(music_after, False, connection2))
+    t1 = threading.Thread(target=save_comments, args=(music_before, True, connection))
+    t2 = threading.Thread(target=save_comments, args=(music_after, False, connection))
     t1.start()
     t2.start()

@@ -32,7 +32,7 @@ class Album(object):
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         body = soup.body
 
-        albums = body.find_all('a', attrs={'class': 'tit f-thide s-fc0'})  # 获取所有专辑
+        albums = body.find_all('a', attrs={'class': 'tit s-fc0'})  # 获取所有专辑
 
         for album in albums:
             albume_id = album['href'].replace('/album?id=', '')
@@ -44,7 +44,8 @@ if __name__ == '__main__':
     my_album = Album()
     for i in artists:
         try:
-            my_album.save_albums(i['ARTIST_ID'])
+            print('Start crawl artist: {}'.format(str(i)))
+            my_album.save_albums(i[1])
             # print(i)
         except Exception as e:
             # 打印错误日志

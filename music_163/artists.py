@@ -40,19 +40,30 @@ def save_artist(group_id, initial):
         except Exception as e:
             # 打印错误日志
             print(e)
-
+    artist_count = 0
     for artist in artists:
+        artist_count += 1
         artist_id = artist['href'].replace('/artist?id=', '').strip()
         artist_name = artist['title'].replace('的音乐', '')
         try:
             sql.insert_artist(artist_id, artist_name)
+            print(artist_count, artist_id, artist_name)
         except Exception as e:
             # 打印错误日志
             print(e)
 
 
-gg = 4003
+# 100* 华语歌手
+# 200* 欧美歌手
+# 400* 其他歌手
+# 600* 日本歌手
+# 700* 韩国歌手
 
-save_artist(gg, 0)
-for i in range(65, 91):
-    save_artist(gg, i)
+# 65-91 姓名首字母A-Z
+# 0 其他
+groups = [1001, 1002, 1003, 2001, 2002, 2003, 4001, 4002, 4003, 6001, 6002, 6003, 7001, 7002, 7003]
+for gg in groups:
+    print('Start crawl group %i...' % gg)
+    save_artist(gg, 0)
+    for i in range(65, 91):
+        save_artist(gg, i)
