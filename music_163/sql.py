@@ -33,9 +33,11 @@ def insert_album(album_id, artist_id):
 
 
 def update_artist_status(artist_id):
+    cursor = connection.cursor()
     sql_update = "UPDATE `artists` set `IS_CRAWL`=1 where `ARTIST_ID`=?"
     cursor.execute(sql_update, (artist_id,))
     connection.commit()
+
 
 # 保存歌手
 def insert_artist(artist_id, artist_name):

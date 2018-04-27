@@ -5,6 +5,7 @@ import time
 import sql
 from config import proxies
 
+
 class Album(object):
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -33,7 +34,7 @@ class Album(object):
         albums = body.find_all('a', attrs={'class': 'tit s-fc0'})  # 获取所有专辑
         print('Artist {} have album: {}'.format(artist_id, str(albums).encode('utf-8')))
         if len(albums) == 0:
-          sql.update_artist_status(artist_id)
+            sql.update_artist_status(artist_id)
         for album in albums:
             albume_id = album['href'].replace('/album?id=', '')
             sql.insert_album(albume_id, artist_id)
