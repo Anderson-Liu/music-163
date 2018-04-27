@@ -1,11 +1,8 @@
-"""
-根据上一步获取的歌手的 ID 来用于获取所有的专辑 ID
-"""
+# -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
 import time
-from music_163 import sql
-
+import sql
 
 class Album(object):
     headers = {
@@ -44,7 +41,7 @@ if __name__ == '__main__':
     my_album = Album()
     for i in artists:
         try:
-            print('Start crawl artist: {}'.format(str(i)))
+            print('Start crawl artist: {}'.format(str(i).encode('utf8')))
             my_album.save_albums(i[1])
             # print(i)
         except Exception as e:
