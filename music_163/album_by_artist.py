@@ -31,7 +31,9 @@ class Album(object):
         body = soup.body
 
         albums = body.find_all('a', attrs={'class': 'tit s-fc0'})  # 获取所有专辑
-
+        print('Artist {} have album: {}'.format(artist_id, str(albums).encode('utf-8')))
+        if len(albums) == 0:
+          sql.update_artist_status(artist_id)
         for album in albums:
             albume_id = album['href'].replace('/album?id=', '')
             sql.insert_album(albume_id, artist_id)
@@ -43,7 +45,7 @@ if __name__ == '__main__':
     for i in artists:
         try:
             print('Start crawl artist: {}'.format(str(i).encode('utf8')))
-            my_album.save_albums(i[1])
+            my_album.save_albums(i[2])
             # print(i)
         except Exception as e:
             # 打印错误日志

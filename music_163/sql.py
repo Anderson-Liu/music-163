@@ -32,6 +32,11 @@ def insert_album(album_id, artist_id):
     connection.commit()
 
 
+def update_artist_status(artist_id):
+    sql_update = "UPDATE `artists` set `IS_CRAWL`=1 where `ARTIST_ID`=?"
+    cursor.execute(sql_update, (artist_id,))
+    connection.commit()
+
 # 保存歌手
 def insert_artist(artist_id, artist_name):
     cursor = connection.cursor()
@@ -43,7 +48,10 @@ def insert_artist(artist_id, artist_name):
 # 获取所有歌手的 ID
 def get_all_artist():
     cursor = connection.cursor()
-    sql = "SELECT `ARTIST_NAME`,`ARTIST_ID` FROM `artists` WHERE `IS_CRAWL`=0 ORDER BY ARTIST_ID"
+    sql = "SELECT count(*) FROM artists WHERE IS_CRAWL = 0 and id > 20000 "
+    cursor.execute(sql, ())
+    print(cursor.fetchall())
+    sql = "SELECT id, `ARTIST_NAME`,`ARTIST_ID` FROM `artists` WHERE `IS_CRAWL`=0 and id > 20000 ORDER BY ARTIST_ID"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
