@@ -30,14 +30,16 @@ class Album(object):
         # 网页解析
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         body = soup.body
-
-        albums = body.find_all('a', attrs={'class': 'tit s-fc0'})  # 获取所有专辑
-        print('Artist {} have album: {}'.format(artist_id, str(albums).encode('utf-8')))
-        if len(albums) == 0:
-            sql.update_artist_status(artist_id)
-        for album in albums:
-            albume_id = album['href'].replace('/album?id=', '')
-            sql.insert_album(albume_id, artist_id)
+        if body is not None:
+            albums = body.find_all('a', attrs={'class': 'tit s-fc0'})  # 获取所有专辑
+            print('Artist {} have album: {}'.format(artist_id, str(albums).encode('utf-8')))
+            if len(albums) == 0:
+                sql.update_artist_status(artist_id)
+            for album in albums:
+                albume_id = album['href'].replace('/album?id=', '')
+                sql.insert_album(albume_id, artist_id)
+        else:
+            print("Album list page's body is null")
 
 
 if __name__ == '__main__':
