@@ -8,7 +8,6 @@ import requests
 from music_163 import sql
 import time
 import threading
-import pymysql.cursors
 
 from music_163.config import proxies
 
@@ -40,7 +39,6 @@ class Comments(object):
 
     # proxies = {'http': 'http://127.0.0.1:10800'}
 
-
     def get_comments(self, music_id, flag):
         self.headers['Referer'] = 'http://music.163.com/playlist?id=' + str(music_id)
 
@@ -59,11 +57,11 @@ if __name__ == '__main__':
 
     def save_comments(musics, flag, connection0):
         for i in musics:
-            my_music_id = i['MUSIC_ID']
+            my_music_id = i[0]
             try:
                 comments = my_comment.get_comments(my_music_id, flag)
                 if comments['total'] > 0:
-                    sql.insert_comments(my_music_id, comments['total'], str(comments), connection0)
+                    sql.insert_comments(my_music_id, comments['total'], str(comments))
             except Exception as e:
                 # 打印错误日志
                 print(my_music_id)

@@ -90,3 +90,5 @@ ENV/
 
 .idea
 config.py
+test.py
+music163.db.bak
