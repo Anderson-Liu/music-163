@@ -39,7 +39,7 @@ class Music(object):
                 music = music.find('a')
                 music_id = music['href'].replace('/song?id=', '')
                 music_name = music.getText()
-                print(music_id, music_name, album_id)
+                print(music_id, music_name.encode('utf8'), album_id)
                 sql.insert_music(music_id, music_name, album_id)
         else:
             print("Album {}'s music list's body is empty...")
@@ -54,5 +54,6 @@ if __name__ == '__main__':
             # print(i)
         except Exception as e:
             # 打印错误日志
-            print(str(i) + ': ' + str(e))
+            print(str(i).encode('utf8'))
+            print(e)
             time.sleep(5)
