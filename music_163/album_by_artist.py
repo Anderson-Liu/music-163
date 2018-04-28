@@ -39,7 +39,7 @@ class Album(object):
                 albume_id = album['href'].replace('/album?id=', '')
                 sql.insert_album(albume_id, artist_id)
         else:
-            print("Album list page's body is null")
+            print("Artist {}'s album list page's body is null".format(artist_id))
 
 
 if __name__ == '__main__':
