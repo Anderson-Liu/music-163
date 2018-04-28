@@ -44,7 +44,7 @@ class Music(object):
                 print(music_id, music_name.encode('utf8'), album_id)
                 sql.insert_music(music_id, music_name, album_id)
         else:
-            print("Album {}'s music list's body is empty...")
+            print("Album {}'s music list's body is empty...".format(album_id))
 
 
 if __name__ == '__main__':
