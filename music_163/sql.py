@@ -3,13 +3,13 @@
 """
 import sqlite3
 
-connection = sqlite3.connect('music163.db', check_same_thread=False)
+connection = sqlite3.connect('music163_tmp.db', check_same_thread=False)
 
 
 # 保存歌单
 def insert_play_list(title, play_list_id, views, music_type):
     cursor = connection.cursor()
-    sql = "INSERT OR IGNORE INTO `play_list` (`PLAY_LIST_ID`, `TITLE`, `VIEWS`, `MUSIC_TYPE`) VALUES (?, ?, ?, ?)"
+    sql = "INSERT OR IGNORE INTO `play_lists` (`PLAY_LIST_ID`, `TITLE`, `VIEWS`, `MUSIC_TYPE`) VALUES (?, ?, ?, ?)"
     cursor.execute(sql, (play_list_id, title, views, music_type))
     connection.commit()
     update_play_list_status(play_list_id)

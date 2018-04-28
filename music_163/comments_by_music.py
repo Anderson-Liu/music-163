@@ -72,7 +72,7 @@ if __name__ == '__main__':
     music_before = sql.get_before_music()
     music_after = sql.get_after_music()
 
-    t1 = threading.Thread(target=save_comments, args=(music_before, True))
-    t2 = threading.Thread(target=save_comments, args=(music_after, True))
+    t1 = threading.Thread(target=save_comments, args=(music_before, False))
+    t2 = threading.Thread(target=save_comments, args=(music_after, False))
     t1.start()
     t2.start()
