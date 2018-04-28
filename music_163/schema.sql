@@ -25,3 +25,12 @@ CREATE TABLE `musics` (
 ,  `ALBUM_ID` varchar(45) DEFAULT NULL
 , IS_CRAWL integer NOT NULL DEFAULT '0',  UNIQUE (`MUSIC_ID`,`ALBUM_ID`)
 );
+
+CREATE TABLE `play_lists` (
+  `id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `PLAY_LIST_ID` varchar(45) NOT NULL
+,  `TITLE` text NOT NULL
+,  `VIEWS` varchar(45) NOT NULL
+,  `MUSIC_TYPE` varchar(45) NOT NULL
+, IS_CRAWL integer NOT NULL DEFAULT '0',  UNIQUE (`PLAY_LIST_ID`)
+);

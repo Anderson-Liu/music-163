@@ -62,6 +62,7 @@ if __name__ == '__main__':
                 comments = my_comment.get_comments(my_music_id, flag)
                 if comments['total'] > 0:
                     sql.insert_comments(my_music_id, comments['total'], str(comments))
+                    print(comments.encode('utf8'))
             except Exception as e:
                 # 打印错误日志
                 print(my_music_id)
