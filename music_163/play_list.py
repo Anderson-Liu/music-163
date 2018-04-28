@@ -3,7 +3,7 @@ import requests
 import sql
 from bs4 import BeautifulSoup
 
-from music_163.config import proxies
+from config import proxies
 
 
 def curl(url, headers):
@@ -36,17 +36,21 @@ class Playlist:
             scnb = {'class': 'nb'}
             dcu = {'class': 'u-cover u-cover-1'}
             ucm = {'class': 'm-cvrlst f-cb'}
-            data = curl(play_url, self.__headers)
-            lst = data.find('ul', ucm)
-            for play in lst.find_all('div', dcu):
-                title = play.find('a', acmsk)['title']
-                play_list_id = play.find('a', acmsk)['href'].replace("/playlist?id=", "")
-                views = play.find('span', scnb).text.replace('万', '0000')
-                print(title, play_list_id, views)
-                sql.insert_play_list(title, play_list_id, views, music_type)
-            return titles
+            s = requests.session()
+            bs = BeautifulSoup(s.get(play_url, headers=self.__headers, proxies=proxies).content, "html.parser")
+            if bs is None:
+                print("Detect page empty when crawl play list: play_list_type：{} page：{}".format(music_type.encode('utf8'), page))
+            else:
+                lst = bs.find('ul', ucm)
+                for play in lst.find_all('div', dcu):
+                    title = play.find('a', acmsk)['title']
+                    play_list_id = play.find('a', acmsk)['href'].replace("/playlist?id=", "")
+                    views = play.find('span', scnb).text.replace('万', '0000')
+                    print(title, play_list_id, views)
+                    sql.insert_play_list(title, play_list_id, views, music_type)
+                return titles
         except Exception as e:
-            print("Error when crawl play list：{} play_list_type：{} page：{}".format(e, music_type, page))
+            print("Error when crawl play list：{} play_list_type：{} page：{}".format(e, music_type.encode('utf8'), page))
             raise
 
 
