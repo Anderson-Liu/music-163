@@ -4,7 +4,7 @@ import re
 import requests
 import sql
 from bs4 import BeautifulSoup
-from music_163.config import proxies
+from config import proxies
 
 
 class MusicByPlayList:
