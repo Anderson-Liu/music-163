@@ -50,7 +50,7 @@ class Music(object):
 if __name__ == '__main__':
     my_music = Music()
 
-    def save_comments(albums):
+    def save_musics(albums):
         for i in albums:
             try:
                 my_music.save_music(i[0])
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     album_before = sql.get_left_album()
     album_after = sql.get_right_album()
 
-    t1 = threading.Thread(target=save_comments, args=(album_before, True))
-    t2 = threading.Thread(target=save_comments, args=(album_after, True))
+    t1 = threading.Thread(target=save_musics, args=(album_before,))
+    t2 = threading.Thread(target=save_musics, args=(album_after,))
     t1.start()
     t2.start()
