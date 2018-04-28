@@ -9,3 +9,13 @@
 3. 根据专辑信息爬取所有的歌曲信息（[music_by _album.py](music_163/music_by_album.py)）；
 4. 根据歌曲信息爬取其评论条数（[comments_by _music.py](music_163/comments_by_music.py)）
 5. 数据库相关的语句都存放于（[sql.py](music_163/sql.py)）中。
+
+特性：
+- 存储使用sqlite3,无需安装MySQL配置；
+- 记录已抓取队列，避免重复抓取，中断后可以随时重新启动；
+
+快速数据库建表：
+
+```bash
+cat schema.sql | sqlite3 music163.db
+```
