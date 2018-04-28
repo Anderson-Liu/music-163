@@ -57,11 +57,12 @@ if __name__ == '__main__':
     def save_comments(musics, flag):
         for i in musics:
             my_music_id = i[0]
+            print(my_music_id)
             try:
                 comments = my_comment.get_comments(my_music_id, flag)
+                print(comments)
                 if comments['total'] > 0:
                     sql.insert_comments(my_music_id, comments['total'], str(comments))
-                    print(comments)
             except Exception as e:
                 # 打印错误日志
                 print(my_music_id)
@@ -71,8 +72,8 @@ if __name__ == '__main__':
 
     music_before = sql.get_before_music()
     music_after = sql.get_after_music()
-
-    t1 = threading.Thread(target=save_comments, args=(music_before, False))
-    t2 = threading.Thread(target=save_comments, args=(music_after, False))
+    print('Done fetch left and right data.')
+    t1 = threading.Thread(target=save_comments, args=(music_before, True))
+    t2 = threading.Thread(target=save_comments, args=(music_after, True))
     t1.start()
     t2.start()

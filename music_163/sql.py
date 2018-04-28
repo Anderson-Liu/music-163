@@ -3,7 +3,7 @@
 """
 import sqlite3
 
-connection = sqlite3.connect('music163_tmp.db', check_same_thread=False)
+connection = sqlite3.connect('music163.db', check_same_thread=False)
 
 
 # 保存歌单
