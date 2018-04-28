@@ -30,9 +30,11 @@ def insert_music_by_play_list(music_id, music_name, play_list_id, album_id):
     cursor.execute(sql, (music_id,))
     is_exist = cursor.fetchall()
     if is_exist:
+        print('Not exist, will create one.')
         sql = "INSERT INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `PLAY_LIST_ID`, `ALBUM_ID`) VALUES (?, ?, ?, ?)"
     else:
-        sql = "UPDATE `musics` SET `MUSIC_NAME`=?, `PLAY_LIST_ID`=?, `ALBUM_ID`=? where `MUSIC_ID`=?"
+        print('Already exist, create one.')
+        sql = "UPDATE `musics` SET `PLAY_LIST_ID`=? where `MUSIC_ID`=?"
     cursor.execute(sql, (music_id, music_name, play_list_id, album_id))
     connection.commit()
     update_play_list_status(play_list_id)
