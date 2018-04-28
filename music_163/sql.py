@@ -6,6 +6,15 @@ import sqlite3
 connection = sqlite3.connect('music163.db', check_same_thread=False)
 
 
+# 保存歌单
+def insert_play_list(title, play_list_id, views, music_type):
+    cursor = connection.cursor()
+    sql = "INSERT OR IGNORE INTO `play_list` (`PLAY_LIST_ID`, `TITLE`, `VIEWS`, `MUSIC_TYPE`) VALUES (?, ?, ?)"
+    cursor.execute(sql, (play_list_id, title, views, music_type))
+    connection.commit()
+    update_play_list_status(play_list_id)
+
+
 # 保存评论
 def insert_comments(music_id, comments, detail):
     cursor = connection.cursor()
@@ -33,6 +42,14 @@ def insert_album(album_id, artist_id):
     update_artist_status(artist_id)
 
 
+# 保存歌手
+def insert_artist(artist_id, artist_name):
+    cursor = connection.cursor()
+    sql = "INSERT OR IGNORE INTO `artists` (`ARTIST_ID`, `ARTIST_NAME`) VALUES (?, ?)"
+    cursor.execute(sql, (artist_id, artist_name))
+    connection.commit()
+
+
 def update_artist_status(artist_id):
     cursor = connection.cursor()
     sql_update = "UPDATE `artists` set `IS_CRAWL`=1 where `ARTIST_ID`=?"
@@ -54,11 +71,10 @@ def update_music_status(music_id):
     connection.commit()
 
 
-# 保存歌手
-def insert_artist(artist_id, artist_name):
+def update_play_list_status(play_list_id):
     cursor = connection.cursor()
-    sql = "INSERT OR IGNORE INTO `artists` (`ARTIST_ID`, `ARTIST_NAME`) VALUES (?, ?)"
-    cursor.execute(sql, (artist_id, artist_name))
+    sql_update = "UPDATE `play_lists` set `IS_CRAWL`=1 where `PLAY_LIST_ID`=?"
+    cursor.execute(sql_update, (play_list_id,))
     connection.commit()
 
 
