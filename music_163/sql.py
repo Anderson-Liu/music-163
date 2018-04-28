@@ -3,15 +3,16 @@
 """
 import sqlite3
 
-connection = sqlite3.connect('music163.db')
+connection = sqlite3.connect('music163.db', check_same_thread=False)
 
 
 # 保存评论
-def insert_comments(music_id, comments, detail, connection0):
-    cursor = connection0.cursor()
+def insert_comments(music_id, comments, detail):
+    cursor = connection.cursor()
     sql = "INSERT OR IGNORE INTO `comments` (`MUSIC_ID`, `COMMENTS`, `DETAILS`) VALUES (?, ?, ?)"
     cursor.execute(sql, (music_id, comments, detail))
-    connection0.commit()
+    connection.commit()
+    update_music_status(music_id)
 
 
 # 保存音乐
@@ -20,6 +21,7 @@ def insert_music(music_id, music_name, album_id):
     sql = "INSERT OR IGNORE INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `ALBUM_ID`) VALUES (?, ?, ?)"
     cursor.execute(sql, (music_id, music_name, album_id))
     connection.commit()
+    update_album_status(album_id)
 
 
 # 保存专辑
@@ -27,15 +29,28 @@ def insert_album(album_id, artist_id):
     cursor = connection.cursor()
     sql = "INSERT OR IGNORE INTO `albums` (`ALBUM_ID`, `ARTIST_ID`) VALUES (?, ?)"
     cursor.execute(sql, (album_id, artist_id))
-    sql_update = "UPDATE `artists` set `IS_CRAWL`=1 where `ARTIST_ID`=?"
-    cursor.execute(sql_update, (artist_id,))
     connection.commit()
+    update_artist_status(artist_id)
 
 
 def update_artist_status(artist_id):
     cursor = connection.cursor()
     sql_update = "UPDATE `artists` set `IS_CRAWL`=1 where `ARTIST_ID`=?"
     cursor.execute(sql_update, (artist_id,))
+    connection.commit()
+
+
+def update_album_status(album_id):
+    cursor = connection.cursor()
+    sql_update = "UPDATE `albums` set `IS_CRAWL`=1 where `ALBUM_ID`=?"
+    cursor.execute(sql_update, (album_id,))
+    connection.commit()
+
+
+def update_music_status(music_id):
+    cursor = connection.cursor()
+    sql_update = "UPDATE `musics` set `IS_CRAWL`=1 where `MUSIC_ID`=?"
+    cursor.execute(sql_update, (music_id,))
     connection.commit()
 
 
