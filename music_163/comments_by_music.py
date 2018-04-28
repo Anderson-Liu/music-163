@@ -55,7 +55,7 @@ if __name__ == '__main__':
     my_comment = Comments()
 
 
-    def save_comments(musics, flag, connection0):
+    def save_comments(musics, flag):
         for i in musics:
             my_music_id = i[0]
             try:
@@ -72,10 +72,7 @@ if __name__ == '__main__':
     music_before = sql.get_before_music()
     music_after = sql.get_after_music()
 
-    # pymysql 链接不是线程安全的
-    connection = sqlite3.connect('music163.db', check_same_thread=False)
-
-    t1 = threading.Thread(target=save_comments, args=(music_before, True, connection))
-    t2 = threading.Thread(target=save_comments, args=(music_after, False, connection))
+    t1 = threading.Thread(target=save_comments, args=(music_before, True))
+    t2 = threading.Thread(target=save_comments, args=(music_after, True))
     t1.start()
     t2.start()
