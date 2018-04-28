@@ -44,7 +44,7 @@ def insert_music_by_play_list(music_id, music_name, play_list_id, album_id):
 # 保存音乐
 def insert_music(music_id, music_name, album_id):
     cursor = connection.cursor()
-    sql = "INSERT OR REPLACE INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `ALBUM_ID`) VALUES (?, ?, ?)"
+    sql = "INSERT OR IGNORE INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `ALBUM_ID`) VALUES (?, ?, ?)"
     cursor.execute(sql, (music_id, music_name, album_id))
     connection.commit()
     update_album_status(album_id)
