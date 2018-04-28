@@ -26,13 +26,13 @@ def insert_comments(music_id, comments, detail):
 # 保存音乐
 def insert_music_by_play_list(music_id, music_name, play_list_id, album_id):
     cursor = connection.cursor()
-    sql = "SELECT id from musics where MUSIC_ID=?"
+    sql = "SELECT * from musics where MUSIC_ID=?"
     cursor.execute(sql, (music_id,))
     is_exist = cursor.fetchall()
     if is_exist:
         sql = "INSERT INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `PLAY_LIST_ID`, `ALBUM_ID`) VALUES (?, ?, ?, ?)"
     else:
-        sql = "UPDATE `musics` SET `MUSIC_ID`=?, `MUSIC_NAME`=?, `PLAY_LIST_ID`=?, `ALBUM_ID`=?"
+        sql = "UPDATE `musics` SET `MUSIC_NAME`=?, `PLAY_LIST_ID`=?, `ALBUM_ID`=? where `MUSIC_ID`=?"
     cursor.execute(sql, (music_id, music_name, play_list_id, album_id))
     connection.commit()
     update_play_list_status(play_list_id)
