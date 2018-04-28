@@ -4,7 +4,7 @@
 import requests
 from bs4 import BeautifulSoup
 import time
-from music_163 import sql
+import sql
 from config import proxies
 
 
