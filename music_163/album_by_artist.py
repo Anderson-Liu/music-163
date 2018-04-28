@@ -50,5 +50,6 @@ if __name__ == '__main__':
             # print(i)
         except Exception as e:
             # 打印错误日志
-            print(str(i) + ': ' + str(e))
+            print(str(i).encode('utf8'))
+            print(e)
             time.sleep(5)
