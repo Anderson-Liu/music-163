@@ -32,14 +32,17 @@ class Music(object):
         # 网页解析
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         body = soup.body
+        if body is not None:
+            musics = body.find('ul', attrs={'class': 'f-hide'}).find_all('li')  # 获取专辑的所有音乐
 
-        musics = body.find('ul', attrs={'class': 'f-hide'}).find_all('li')  # 获取专辑的所有音乐
-
-        for music in musics:
-            music = music.find('a')
-            music_id = music['href'].replace('/song?id=', '')
-            music_name = music.getText()
-            sql.insert_music(music_id, music_name, album_id)
+            for music in musics:
+                music = music.find('a')
+                music_id = music['href'].replace('/song?id=', '')
+                music_name = music.getText()
+                print(music_id, music_name, album_id)
+                sql.insert_music(music_id, music_name, album_id)
+        else:
+            print("Album {}'s music list's body is empty...")
 
 
 if __name__ == '__main__':
