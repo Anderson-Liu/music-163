@@ -1,6 +1,8 @@
 """
 根据专辑 ID 获取到所有的音乐 ID
 """
+import threading
+
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -46,14 +48,23 @@ class Music(object):
 
 
 if __name__ == '__main__':
-    albums = sql.get_all_album()
     my_music = Music()
-    for i in albums:
-        try:
-            my_music.save_music(i[0])
-            # print(i)
-        except Exception as e:
-            # 打印错误日志
-            print(str(i).encode('utf8'))
-            print(e)
-            time.sleep(5)
+
+    def save_comments(albums):
+        for i in albums:
+            try:
+                my_music.save_music(i[0])
+                # print(i)
+            except Exception as e:
+                # 打印错误日志
+                print(str(i).encode('utf8'))
+                print(e)
+                time.sleep(5)
+
+    album_before = sql.get_left_album()
+    album_after = sql.get_right_album()
+
+    t1 = threading.Thread(target=save_comments, args=(album_before, True))
+    t2 = threading.Thread(target=save_comments, args=(album_after, True))
+    t1.start()
+    t2.start()

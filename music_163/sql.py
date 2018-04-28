@@ -73,7 +73,23 @@ def get_all_artist():
 # 获取所有专辑的 ID
 def get_all_album():
     cursor = connection.cursor()
-    sql = "SELECT `ALBUM_ID` FROM `albums` ORDER BY ALBUM_ID"
+    sql = "SELECT `ALBUM_ID` FROM `albums` WHERE `IS_CRAWL`=0 ORDER BY ALBUM_ID"
+    cursor.execute(sql, ())
+    return cursor.fetchall()
+
+
+# 获取前半部分专辑的 ID
+def get_left_album():
+    cursor = connection.cursor()
+    sql = "SELECT `ALBUM_ID` FROM `albums` WHERE `IS_CRAWL`=0 and id > 150000 ORDER BY ALBUM_ID"
+    cursor.execute(sql, ())
+    return cursor.fetchall()
+
+
+# 获取后半部分专辑的 ID
+def get_right_album():
+    cursor = connection.cursor()
+    sql = "SELECT `ALBUM_ID` FROM `albums` WHERE `IS_CRAWL`=0 and id < 150000 ORDER BY ALBUM_ID"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
@@ -81,7 +97,7 @@ def get_all_album():
 # 获取所有音乐的 ID
 def get_all_music():
     cursor = connection.cursor()
-    sql = "SELECT `MUSIC_ID` FROM `musics` ORDER BY MUSIC_ID"
+    sql = "SELECT `MUSIC_ID` FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
@@ -89,7 +105,7 @@ def get_all_music():
 # 获取前一半音乐的 ID
 def get_before_music():
     cursor = connection.cursor()
-    sql = "SELECT `MUSIC_ID` FROM `musics` ORDER BY MUSIC_ID LIMIT 0, 800000"
+    sql = "SELECT `MUSIC_ID` FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 0, 800000"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
@@ -97,7 +113,7 @@ def get_before_music():
 # 获取后一半音乐的 ID
 def get_after_music():
     cursor = connection.cursor()
-    sql = "SELECT `MUSIC_ID` FROM `musics` ORDER BY MUSIC_ID LIMIT 800000, 1197429"
+    sql = "SELECT `MUSIC_ID` FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 800000, 1197429"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
