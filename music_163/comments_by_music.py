@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     def save_comments(musics, flag, connection0):
         for i in musics:
-            my_music_id = i['MUSIC_ID']
+            my_music_id = i[0]
             try:
                 comments = my_comment.get_comments(my_music_id, flag)
                 if comments['total'] > 0:

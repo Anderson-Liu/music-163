@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 from music_163 import sql
+from config import proxies
 
 
 class Music(object):
@@ -26,7 +27,7 @@ class Music(object):
     def save_music(self, album_id):
         params = {'id': album_id}
         # 获取专辑对应的页面
-        r = requests.get('http://music.163.com/album', headers=self.headers, params=params)
+        r = requests.get('http://music.163.com/album', headers=self.headers, params=params, proxies=proxies)
 
         # 网页解析
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     my_music = Music()
     for i in albums:
         try:
-            my_music.save_music(i['ALBUM_ID'])
+            my_music.save_music(i[0])
             # print(i)
         except Exception as e:
             # 打印错误日志
