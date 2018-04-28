@@ -29,7 +29,7 @@ def insert_music_by_play_list(music_id, music_name, play_list_id, album_id):
     sql = "SELECT * from musics where MUSIC_ID=?"
     cursor.execute(sql, (music_id,))
     is_exist = cursor.fetchall()
-    if is_exist:
+    if not is_exist:
         print('Not exist, will create one.')
         sql = "INSERT INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `PLAY_LIST_ID`, `ALBUM_ID`) VALUES (?, ?, ?, ?)"
     else:
