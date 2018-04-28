@@ -5,11 +5,11 @@ import base64
 import sqlite3
 
 import requests
-from music_163 import sql
+import sql
 import time
 import threading
 
-from music_163.config import proxies
+from config import proxies
 
 
 class Comments(object):
@@ -54,7 +54,6 @@ class Comments(object):
 if __name__ == '__main__':
     my_comment = Comments()
 
-
     def save_comments(musics, flag):
         for i in musics:
             my_music_id = i[0]
@@ -62,7 +61,7 @@ if __name__ == '__main__':
                 comments = my_comment.get_comments(my_music_id, flag)
                 if comments['total'] > 0:
                     sql.insert_comments(my_music_id, comments['total'], str(comments))
-                    print(comments.encode('utf8'))
+                    print(comments)
             except Exception as e:
                 # 打印错误日志
                 print(my_music_id)

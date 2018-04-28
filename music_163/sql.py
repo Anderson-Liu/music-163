@@ -9,7 +9,7 @@ connection = sqlite3.connect('music163.db', check_same_thread=False)
 # 保存歌单
 def insert_play_list(title, play_list_id, views, music_type):
     cursor = connection.cursor()
-    sql = "INSERT OR IGNORE INTO `play_list` (`PLAY_LIST_ID`, `TITLE`, `VIEWS`, `MUSIC_TYPE`) VALUES (?, ?, ?)"
+    sql = "INSERT OR IGNORE INTO `play_list` (`PLAY_LIST_ID`, `TITLE`, `VIEWS`, `MUSIC_TYPE`) VALUES (?, ?, ?, ?)"
     cursor.execute(sql, (play_list_id, title, views, music_type))
     connection.commit()
     update_play_list_status(play_list_id)
@@ -113,7 +113,7 @@ def get_right_album():
 # 获取所有音乐的 ID
 def get_all_music():
     cursor = connection.cursor()
-    sql = "SELECT `MUSIC_ID` FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID"
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
@@ -121,7 +121,7 @@ def get_all_music():
 # 获取前一半音乐的 ID
 def get_before_music():
     cursor = connection.cursor()
-    sql = "SELECT `MUSIC_ID` FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 0, 800000"
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 0, 800000"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
@@ -129,7 +129,15 @@ def get_before_music():
 # 获取后一半音乐的 ID
 def get_after_music():
     cursor = connection.cursor()
-    sql = "SELECT `MUSIC_ID` FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 800000, 1197429"
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 800000, 1197429"
+    cursor.execute(sql, ())
+    return cursor.fetchall()
+
+
+# 获取所有play_list
+def get_all_play_list():
+    cursor = connection.cursor()
+    sql = "SELECT DISTINCT(`PLAY_LIST_ID`) FROM `play_lists` WHERE `IS_CRAWL`=0"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
