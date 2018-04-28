@@ -51,9 +51,10 @@ class MusicByPlayList:
             ms = music['name']
             ar = ",".join(artists)
             ab = music['album']['name']
+            ab_id = music['album']['id']
             id = music['id']
             print('ID: {}, NAME: {}, ARTIST: {}, ALBUM: {}'.format(id, ms, ar, ab))
-            sql.insert_music_by_play_list(id, ms, playlist_id)
+            sql.insert_music_by_play_list(id, ms, playlist_id, ab_id)
 
 
 if __name__ == '__main__':
