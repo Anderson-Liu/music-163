@@ -12,7 +12,6 @@ def insert_play_list(title, play_list_id, views, music_type):
     sql = "INSERT OR IGNORE INTO `play_lists` (`PLAY_LIST_ID`, `TITLE`, `VIEWS`, `MUSIC_TYPE`) VALUES (?, ?, ?, ?)"
     cursor.execute(sql, (play_list_id, title, views, music_type))
     connection.commit()
-    update_play_list_status(play_list_id)
 
 
 # 保存评论
@@ -25,9 +24,24 @@ def insert_comments(music_id, comments, detail):
 
 
 # 保存音乐
+def insert_music_by_play_list(music_id, music_name, play_list_id):
+    cursor = connection.cursor()
+    sql = "SELECT id from musics where MUSIC_ID=?"
+    cursor.execute(sql, (music_id,))
+    is_exist = cursor.fetchall()
+    if is_exist:
+        sql = "INSERT INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `PLAY_LIST_ID`) VALUES (?, ?, ?)"
+    else:
+        sql = "UPDATE `musics` SET `MUSIC_ID`=?, `MUSIC_NAME`=?, `PLAY_LIST_ID`=?"
+    cursor.execute(sql, (music_id, music_name, play_list_id))
+    connection.commit()
+    update_play_list_status(play_list_id)
+
+
+# 保存音乐
 def insert_music(music_id, music_name, album_id):
     cursor = connection.cursor()
-    sql = "INSERT OR IGNORE INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `ALBUM_ID`) VALUES (?, ?, ?)"
+    sql = "INSERT OR REPLACE INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `ALBUM_ID`) VALUES (?, ?, ?)"
     cursor.execute(sql, (music_id, music_name, album_id))
     connection.commit()
     update_album_status(album_id)
@@ -75,6 +89,14 @@ def update_play_list_status(play_list_id):
     cursor = connection.cursor()
     sql_update = "UPDATE `play_lists` set `IS_CRAWL`=1 where `PLAY_LIST_ID`=?"
     cursor.execute(sql_update, (play_list_id,))
+    connection.commit()
+
+
+def update_play_list_content(play_list_id, creator, play_count, subscribe_count, share_count, commend_count):
+    cursor = connection.cursor()
+    sql_update = "UPDATE `play_lists` set IS_CRAWL=1, CREATER=?, PLAY_COUNT=?, " \
+                 "SUBSCRIBE_COUNT=?, SHARE_COUNT=?, COMMEND_COUNT=? where `PLAY_LIST_ID`=?"
+    cursor.execute(sql_update, (play_list_id, creator, play_count, subscribe_count, share_count, commend_count))
     connection.commit()
 
 
@@ -137,7 +159,7 @@ def get_after_music():
 # 获取所有play_list
 def get_all_play_list():
     cursor = connection.cursor()
-    sql = "SELECT DISTINCT(`PLAY_LIST_ID`) FROM `play_lists` WHERE `IS_CRAWL`=0"
+    sql = "SELECT DISTINCT(`PLAY_LIST_ID`) FROM `play_lists` WHERE `IS_CRAWL`=1"
     cursor.execute(sql, ())
     return cursor.fetchall()
 

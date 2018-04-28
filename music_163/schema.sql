@@ -34,3 +34,14 @@ CREATE TABLE `play_lists` (
 ,  `MUSIC_TYPE` varchar(45) NOT NULL
 , IS_CRAWL integer NOT NULL DEFAULT '0',  UNIQUE (`PLAY_LIST_ID`)
 );
+
+alter table musics add PLAY_LIST_ID varchar default NULL;
+
+alter table play_lists add CREATER varchar default NULL;
+alter table play_lists add PLAY_COUNT varchar default NULL;
+alter table play_lists add SUBSCRIBE_COUNT varchar default NULL;
+alter table play_lists add SHARE_COUNT varchar default NULL;
+alter table play_lists add COMMEND_COUNT varchar default NULL;
+
+
+
