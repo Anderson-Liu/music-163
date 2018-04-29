@@ -151,9 +151,9 @@ def get_after_music():
 
 
 # 获取后一半音乐的 ID
-def get_music_inside_play_list():
+def get_music_from_play_list():
     cursor = connection.cursor()
-    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 AND `PLAY_LIST_ID` IS NOT NULL ORDER BY MUSIC_ID"
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics_in_play_list` WHERE `IS_CRAWL`=0 AND `PLAY_LIST_ID` IS NOT NULL ORDER BY MUSIC_ID"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
