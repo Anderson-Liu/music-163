@@ -1,5 +1,6 @@
 import json
 import re
+import sqlite3
 import threading
 
 import requests
@@ -29,6 +30,7 @@ class MusicByPlayList:
             return playlist
         except Exception as e:
             print("抓取歌单页面存在问题：{} 歌单ID：{}".format(e, playlist_id))
+            sql.update_play_list_status(playlist_id)
 
     def get_playlist(self, playlist_id):
         playlist = self.curl_playlist(playlist_id)
@@ -66,7 +68,14 @@ if __name__ == '__main__':
 
     def save_music():
         for list_id in playlists:
-            music_by_play_list.get_playlist(list_id[0])
+            retry = 0
+            try:
+                music_by_play_list.get_playlist(list_id[0])
+            except sqlite3.OperationalError:
+                # try again
+                if retry < 3:
+                    music_by_play_list.get_playlist(list_id[0])
+                retry += 1
 
 
     t = threading.Thread(target=save_music)
