@@ -29,6 +29,7 @@ class MusicByPlayList:
             return playlist
         except Exception as e:
             print("抓取歌单页面存在问题：{} 歌单ID：{}".format(e, playlist_id))
+            sql.update_play_list_status(playlist_id)
 
     def get_playlist(self, playlist_id):
         playlist = self.curl_playlist(playlist_id)
