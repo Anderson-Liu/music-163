@@ -70,6 +70,9 @@ if __name__ == '__main__':
             # Set status to already crawled
             sql.update_music_status(music_id)
             pass
+        except Exception as e:
+            print(e)
+            pass
 
     def save_comments(musics, flag):
         retry_count = 0

@@ -58,6 +58,9 @@ if __name__ == '__main__':
             retry_count += 1
             if retry_count < 3:
                 fetch_music(music_id, retry_count)
+        except Exception as e:
+            print(e)
+            pass
 
     def save_musics(albums):
         retry_count = 0
