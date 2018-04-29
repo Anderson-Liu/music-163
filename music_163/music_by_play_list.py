@@ -66,16 +66,18 @@ if __name__ == '__main__':
     music_by_play_list = MusicByPlayList()
 
 
+    def fetch_play_list(list_id, retry_count):
+        try:
+            music_by_play_list.get_playlist(list_id)
+        except sqlite3.OperationalError:
+            retry_count += 1
+            fetch_play_list(list_id, retry_count)
+
+
     def save_music():
+        retry_count = 0
         for list_id in playlists:
-            retry = 0
-            try:
-                music_by_play_list.get_playlist(list_id[0])
-            except sqlite3.OperationalError:
-                # try again
-                if retry < 3:
-                    music_by_play_list.get_playlist(list_id[0])
-                retry += 1
+            fetch_play_list(list_id[0], retry_count)
 
 
     t = threading.Thread(target=save_music)
