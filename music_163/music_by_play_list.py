@@ -71,7 +71,8 @@ if __name__ == '__main__':
             music_by_play_list.get_playlist(list_id)
         except sqlite3.OperationalError:
             retry_count += 1
-            fetch_play_list(list_id, retry_count)
+            if retry_count < 3:
+                fetch_play_list(list_id, retry_count)
 
 
     def save_music():

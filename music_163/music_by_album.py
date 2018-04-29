@@ -1,6 +1,7 @@
 """
 根据专辑 ID 获取到所有的音乐 ID
 """
+import sqlite3
 import threading
 
 import requests
@@ -50,10 +51,19 @@ class Music(object):
 if __name__ == '__main__':
     my_music = Music()
 
+    def fetch_music(music_id, retry_count):
+        try:
+            my_music.save_music(music_id)
+        except sqlite3.OperationalError:
+            retry_count += 1
+            if retry_count < 3:
+                fetch_music(music_id, retry_count)
+
     def save_musics(albums):
+        retry_count = 0
         for i in albums:
             try:
-                my_music.save_music(i[0])
+                fetch_music(i[0], retry_count)
                 # print(i)
             except Exception as e:
                 # 打印错误日志

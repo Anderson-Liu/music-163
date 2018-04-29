@@ -54,21 +54,24 @@ class Comments(object):
 if __name__ == '__main__':
     my_comment = Comments()
 
+
+    def fetch_comment(music_id, retry_count, flag):
+        try:
+            comments = my_comment.get_comments(music_id, flag)
+            print(comments)
+            if comments['total'] > 0:
+                sql.insert_comments(music_id, comments['total'], str(comments))
+        except sqlite3.OperationalError:
+            retry_count += 1
+            if retry_count < 3:
+                fetch_comment(music_id, retry_count, flag)
+
     def save_comments(musics, flag):
+        retry_count = 0
         for i in musics:
             my_music_id = i[0]
             print(my_music_id)
-            try:
-                comments = my_comment.get_comments(my_music_id, flag)
-                print(comments)
-                if comments['total'] > 0:
-                    sql.insert_comments(my_music_id, comments['total'], str(comments))
-            except Exception as e:
-                # 打印错误日志
-                print(my_music_id)
-                print(e)
-                time.sleep(5)
-
+            fetch_comment(my_music_id, retry_count, flag)
 
     music_before = sql.get_before_music()
     music_after = sql.get_after_music()
