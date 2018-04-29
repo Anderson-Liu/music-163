@@ -26,17 +26,8 @@ def insert_comments(music_id, comments, detail):
 # 保存音乐
 def insert_music_by_play_list(music_id, music_name, play_list_id, album_id):
     cursor = connection.cursor()
-    sql = "SELECT * from musics where MUSIC_ID=?"
-    cursor.execute(sql, (music_id,))
-    is_exist = cursor.fetchall()
-    if not is_exist:
-        print('Not exist, will create one.')
-        sql = "INSERT INTO `musics` (`MUSIC_ID`, `MUSIC_NAME`, `PLAY_LIST_ID`, `ALBUM_ID`) VALUES (?, ?, ?, ?)"
-        cursor.execute(sql, (music_id, music_name, play_list_id, album_id))
-    else:
-        print('Already exist, create one.')
-        sql = "UPDATE `musics` SET `PLAY_LIST_ID`=? where `MUSIC_ID`=?"
-        cursor.execute(sql, (music_id, play_list_id))
+    sql = "INSERT OR IGNORE INTO `musics_in_play_list` (`MUSIC_ID`, `MUSIC_NAME`, `PLAY_LIST_ID`, `ALBUM_ID`) VALUES (?, ?, ?, ?)"
+    cursor.execute(sql, (music_id, music_name, play_list_id, album_id))
     connection.commit()
     update_play_list_status(play_list_id)
 
@@ -159,10 +150,18 @@ def get_after_music():
     return cursor.fetchall()
 
 
+# 获取后一半音乐的 ID
+def get_music_inside_play_list():
+    cursor = connection.cursor()
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 AND `PLAY_LIST_ID` IS NOT NULL ORDER BY MUSIC_ID"
+    cursor.execute(sql, ())
+    return cursor.fetchall()
+
+
 # 获取所有play_list
 def get_all_play_list():
     cursor = connection.cursor()
-    sql = "SELECT DISTINCT(`PLAY_LIST_ID`) FROM `play_lists` WHERE `IS_CRAWL`=1"
+    sql = "SELECT DISTINCT(`PLAY_LIST_ID`) FROM `play_lists` WHERE `IS_CRAWL`=0"
     cursor.execute(sql, ())
     return cursor.fetchall()
 

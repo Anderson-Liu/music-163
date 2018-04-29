@@ -35,7 +35,7 @@ CREATE TABLE `play_lists` (
 , IS_CRAWL integer NOT NULL DEFAULT '0',  UNIQUE (`PLAY_LIST_ID`)
 );
 
-alter table musics add PLAY_LIST_ID varchar default NULL;
+-- alter table musics add PLAY_LIST_ID varchar default NULL;
 
 alter table play_lists add CREATER varchar default NULL;
 alter table play_lists add PLAY_COUNT varchar default NULL;
@@ -44,4 +44,11 @@ alter table play_lists add SHARE_COUNT varchar default NULL;
 alter table play_lists add COMMEND_COUNT varchar default NULL;
 
 
-
+CREATE TABLE `musics_in_play_list` (
+  `id` integer NOT NULL PRIMARY KEY AUTOINCREMENT
+,  `MUSIC_ID` varchar(45) NOT NULL
+,  `MUSIC_NAME` varchar(45) NOT NULL
+,  `ALBUM_ID` varchar(45) DEFAULT NULL
+,  `PLAY_LIST_ID` varchar NOT NULL
+, IS_CRAWL integer NOT NULL DEFAULT '0',  UNIQUE (`MUSIC_ID`,`PLAY_LIST_ID`)
+);
