@@ -1,5 +1,6 @@
 import json
 import re
+import threading
 
 import requests
 import sql
@@ -31,7 +32,8 @@ class MusicByPlayList:
 
     def get_playlist(self, playlist_id):
         playlist = self.curl_playlist(playlist_id)
-
+        if not playlist:
+            return
         print("《" + playlist['name'] + "》")
         author = playlist['creator']['nickname']
         pc = str(playlist['playCount'])
@@ -59,5 +61,13 @@ class MusicByPlayList:
 
 if __name__ == '__main__':
     playlists = sql.get_all_play_list()
-    for list_id in playlists:
-        MusicByPlayList().get_playlist(list_id[0])
+    music_by_play_list = MusicByPlayList()
+
+
+    def save_music():
+        for list_id in playlists:
+            music_by_play_list.get_playlist(list_id[0])
+
+
+    t = threading.Thread(target=save_music)
+    t.start()
