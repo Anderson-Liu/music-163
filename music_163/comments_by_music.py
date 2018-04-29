@@ -2,6 +2,7 @@
 根据歌曲 ID 获得所有的歌曲所对应的评论信息
 """
 import base64
+import json
 import sqlite3
 
 import requests
@@ -65,6 +66,10 @@ if __name__ == '__main__':
             retry_count += 1
             if retry_count < 3:
                 fetch_comment(music_id, retry_count, flag)
+        except json.decoder.JSONDecodeError:
+            # Set status to already crawled
+            sql.update_music_status(music_id)
+            pass
 
     def save_comments(musics, flag):
         retry_count = 0
