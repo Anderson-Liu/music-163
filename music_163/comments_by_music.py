@@ -11,6 +11,9 @@ import time
 import threading
 
 from config import proxies
+from getlogging import get_logging
+
+logger = get_logging('kindle')
 
 
 class Comments(object):
@@ -59,7 +62,7 @@ if __name__ == '__main__':
     def fetch_comment(music_id, retry_count, flag):
         try:
             comments = my_comment.get_comments(music_id, flag)
-            print(comments)
+            logger.info(comments)
             if comments['total'] > 0:
                 sql.insert_comments(music_id, comments['total'], str(comments))
         except sqlite3.OperationalError:
@@ -71,23 +74,29 @@ if __name__ == '__main__':
             sql.update_music_status(music_id)
             pass
         except Exception as e:
-            print(e)
+            sql.update_music_status(music_id)
+            logger.error(e)
             pass
 
     def save_comments(musics, flag):
         retry_count = 0
         for i in musics:
             my_music_id = i[0]
-            print(my_music_id)
+            if '-' in my_music_id:
+                my_music_id.replace('-', '')
+            logger.info(my_music_id)
             fetch_comment(my_music_id, retry_count, flag)
 
     music_before = sql.get_before_music()
+    music_medium = sql.get_medium_music()
     music_after = sql.get_after_music()
     music_in_play_list = sql.get_music_from_play_list()
-    print('Done fetch left and right data.')
+    logger.info('Done fetch left and right data.')
     t1 = threading.Thread(target=save_comments, args=(music_before, True))
-    t2 = threading.Thread(target=save_comments, args=(music_after, True))
-    t3 = threading.Thread(target=save_comments, args=(music_in_play_list, True))
+    t2 = threading.Thread(target=save_comments, args=(music_medium, True))
+    t3 = threading.Thread(target=save_comments, args=(music_after, True))
+    t4 = threading.Thread(target=save_comments, args=(music_in_play_list, True))
     t1.start()
     t2.start()
     t3.start()
+    t4.start()

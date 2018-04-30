@@ -92,3 +92,4 @@ ENV/
 config.py
 test.py
 music163.db.bak
+music163.db

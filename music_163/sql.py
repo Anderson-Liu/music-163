@@ -143,9 +143,17 @@ def get_before_music():
 
 
 # 获取后一半音乐的 ID
+def get_medium_music():
+    cursor = connection.cursor()
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 800000, 1600000"
+    cursor.execute(sql, ())
+    return cursor.fetchall()
+
+
+# 获取后一半音乐的 ID
 def get_after_music():
     cursor = connection.cursor()
-    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 800000, 1197429"
+    sql = "SELECT DISTINCT(`MUSIC_ID`) FROM `musics` WHERE `IS_CRAWL`=0 ORDER BY MUSIC_ID LIMIT 1600000, 2457336"
     cursor.execute(sql, ())
     return cursor.fetchall()
 
