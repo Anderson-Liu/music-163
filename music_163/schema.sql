@@ -52,3 +52,7 @@ CREATE TABLE `musics_in_play_list` (
 ,  `PLAY_LIST_ID` varchar NOT NULL
 , IS_CRAWL integer NOT NULL DEFAULT '0',  UNIQUE (`MUSIC_ID`,`PLAY_LIST_ID`)
 );
+
+
+create unique index idx_music_comments on comments (music_id, comments);
+create unique index idx_music_play_list on musics_in_play_list (music_id, play_list_id);

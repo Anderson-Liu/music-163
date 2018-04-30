@@ -4,8 +4,11 @@
 import base64
 import json
 import sqlite3
+import traceback
 
+import psycopg2
 import requests
+import simplejson
 import sql
 import time
 import threading
@@ -59,39 +62,37 @@ if __name__ == '__main__':
     my_comment = Comments()
 
 
-    def fetch_comment(music_id, retry_count, flag):
+    def fetch_comment(music_id, retry_count, flag, connection):
         try:
             comments = my_comment.get_comments(music_id, flag)
-            logger.info(comments)
+            print(comments)
             if comments['total'] > 0:
-                sql.insert_comments(music_id, comments['total'], str(comments))
-        except sqlite3.OperationalError:
-            retry_count += 1
-            if retry_count < 3:
-                fetch_comment(music_id, retry_count, flag)
-        except json.decoder.JSONDecodeError:
+                sql.insert_comments(music_id, comments['total'], str(comments), connection)
+        except simplejson.scanner.JSONDecodeError:
             # Set status to already crawled
             sql.update_music_status(music_id)
             pass
         except Exception as e:
-            sql.update_music_status(music_id)
-            logger.error(e)
-            pass
+            traceback.print_exc()
+            time.sleep(60)
 
     def save_comments(musics, flag):
         retry_count = 0
+        # connection = sqlite3.connect('music163.db')
+        connection = psycopg2.connect(database='music163')
         for i in musics:
             my_music_id = i[0]
             if '-' in my_music_id:
                 my_music_id.replace('-', '')
             logger.info(my_music_id)
-            fetch_comment(my_music_id, retry_count, flag)
+            fetch_comment(my_music_id, retry_count, flag, connection)
 
     music_before = sql.get_before_music()
     music_medium = sql.get_medium_music()
     music_after = sql.get_after_music()
     music_in_play_list = sql.get_music_from_play_list()
     logger.info('Done fetch left and right data.')
+
     t1 = threading.Thread(target=save_comments, args=(music_before, True))
     t2 = threading.Thread(target=save_comments, args=(music_medium, True))
     t3 = threading.Thread(target=save_comments, args=(music_after, True))
