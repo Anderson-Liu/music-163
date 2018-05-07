@@ -37,11 +37,11 @@ CREATE TABLE `play_lists` (
 
 -- alter table musics add PLAY_LIST_ID varchar default NULL;
 
-alter table play_lists add CREATER varchar default NULL;
-alter table play_lists add PLAY_COUNT varchar default NULL;
-alter table play_lists add SUBSCRIBE_COUNT varchar default NULL;
-alter table play_lists add SHARE_COUNT varchar default NULL;
-alter table play_lists add COMMEND_COUNT varchar default NULL;
+-- alter table play_lists add CREATER varchar default NULL;
+-- alter table play_lists add PLAY_COUNT varchar default NULL;
+-- alter table play_lists add SUBSCRIBE_COUNT varchar default NULL;
+-- alter table play_lists add SHARE_COUNT varchar default NULL;
+-- alter table play_lists add COMMEND_COUNT varchar default NULL;
 
 
 CREATE TABLE `musics_in_play_list` (
@@ -54,5 +54,5 @@ CREATE TABLE `musics_in_play_list` (
 );
 
 
-create unique index idx_music_comments on comments (music_id, comments);
-create unique index idx_music_play_list on musics_in_play_list (music_id, play_list_id);
+-- create unique index idx_music_comments on comments (music_id, comments);
+-- create unique index idx_music_play_list on musics_in_play_list (music_id, play_list_id);
